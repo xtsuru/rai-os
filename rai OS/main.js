@@ -12,6 +12,8 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('raigames-taskbar').addEventListener('click', () => openWindow('raigames'));
     document.getElementById('raibrickbreaker-taskbar').addEventListener('click', () => openWindow('raibrickbreaker'));
     document.getElementById('raiminesweeper-taskbar').addEventListener('click', () => openWindow('raiminesweeper'));
+    const rankingTb = document.getElementById('rairanking-taskbar');
+    if (rankingTb) rankingTb.addEventListener('click', () => openWindow('rairanking'));
     document.getElementById('rai-search-taskbar').addEventListener('click', () => toggleSearch());
     
     // Taskbar Search Input

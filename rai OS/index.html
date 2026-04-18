@@ -12,7 +12,46 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 </head>
-<body>
+<body class="rai-auth-loading">
+    <div id="auth-overlay" class="auth-overlay">
+        <div class="auth-card">
+            <div class="auth-brand">
+                <div class="auth-logo">R</div>
+                <h1>Rai OS</h1>
+                <p>계정으로 로그인하세요</p>
+            </div>
+            <div class="auth-tabs">
+                <button type="button" id="auth-tab-login" class="auth-tab active">로그인</button>
+                <button type="button" id="auth-tab-register" class="auth-tab">회원가입</button>
+            </div>
+            <div id="auth-error" class="auth-error" style="display:none;"></div>
+            <form id="auth-login-form" class="auth-form">
+                <label class="auth-label">이메일 <span class="auth-hint">(TLS 전용: tls 또는 tls123 만 입력 가능)</span></label>
+                <input type="text" id="auth-login-email" class="auth-input" autocomplete="username" required placeholder="you@example.com 또는 tls123">
+                <label class="auth-label">비밀번호</label>
+                <input type="password" id="auth-login-pw" class="auth-input" autocomplete="current-password" required>
+                <button type="submit" class="action-btn primary auth-submit">로그인</button>
+            </form>
+            <form id="auth-register-form" class="auth-form hidden">
+                <label class="auth-label">이메일</label>
+                <input type="email" id="auth-reg-email" class="auth-input" autocomplete="email" required placeholder="you@example.com">
+                <label class="auth-label">비밀번호</label>
+                <input type="password" id="auth-reg-pw" class="auth-input" autocomplete="new-password" required minlength="6">
+                <label class="auth-label">비밀번호 확인</label>
+                <input type="password" id="auth-reg-pw2" class="auth-input" autocomplete="new-password" required minlength="6">
+                <button type="submit" class="action-btn primary auth-submit">가입하기</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="welcome-overlay" class="welcome-overlay hidden">
+        <div class="welcome-card">
+            <h2 id="welcome-message">환영합니다!</h2>
+            <p class="welcome-hint">시작 화면으로 이동하려면 버튼을 누르세요.</p>
+            <button type="button" id="welcome-dismiss-btn" class="action-btn primary">시작</button>
+        </div>
+    </div>
+
     <div id="desktop">
         <div id="wallpaper"></div>
         
@@ -125,6 +164,14 @@
                                 <div class="app-desc">캐시를 발굴하여 특별한 앱을 구매해보세요.</div>
                             </div>
                             <div id="btn-container-cash" class="app-btn-container"></div>
+                        </div>
+                        <div class="store-app-card">
+                            <div class="app-logo rai-ranking-logo">🏆</div>
+                            <div class="app-info">
+                                <div class="app-name-large">라이 랭킹</div>
+                                <div class="app-desc">다른 유저와 실시간 캐시 랭킹을 겨룹니다.</div>
+                            </div>
+                            <div id="btn-container-ranking" class="app-btn-container"></div>
                         </div>
                         <div class="store-app-card">
                             <div class="app-logo rai-wallpapers-plus-logo">W+</div>
@@ -403,6 +450,25 @@
                 </div>
                 <div class="window-content settings-container">
                     <div class="settings-group">
+                        <h3>계정</h3>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-name">로그인</div>
+                                <div class="setting-desc" id="settings-account-label">로그인되어 있지 않습니다.</div>
+                            </div>
+                            <div class="settings-account-actions">
+                                <button type="button" id="settings-logout-btn" class="action-btn">로그아웃</button>
+                            </div>
+                        </div>
+                        <div class="setting-item danger-zone">
+                            <div class="setting-info">
+                                <div class="setting-name">데이터 삭제</div>
+                                <div class="setting-desc">이 기기의 로컬 데이터와 클라우드에 저장된 계정 데이터를 모두 삭제합니다.</div>
+                            </div>
+                            <button type="button" id="settings-delete-data-btn" class="action-btn danger">데이터 삭제</button>
+                        </div>
+                    </div>
+                    <div class="settings-group">
                         <h3>개인 설정</h3>
                         <div class="setting-item">
                             <div class="setting-info">
@@ -497,6 +563,28 @@
                     </div>
                 </div>
             </div>
+            <div class="window hidden" id="window-rairanking">
+                <div class="window-header">
+                    <div class="window-title">
+                        <div class="app-logo-mini rai-ranking-logo" style="margin-right: 8px;">🏆</div>
+                        라이 랭킹
+                    </div>
+                    <div class="window-controls">
+                        <button class="win-btn maximize-btn" onclick="toggleMaximize('rairanking')"></button>
+                        <button class="win-btn close-btn" onclick="closeWindow('rairanking')">&times;</button>
+                    </div>
+                </div>
+                <div class="window-content ranking-container">
+                    <div class="ranking-header">
+                        <h3>실시간 캐시 랭킹</h3>
+                        <p>모든 사용자의 보유 캐시를 실시간으로 비교합니다.</p>
+                    </div>
+                    <div id="ranking-list-body" class="ranking-list-body">
+                        <div class="ranking-empty">불러오는 중…</div>
+                    </div>
+                </div>
+            </div>
+
             <div class="window hidden" id="window-raicash">
                 <div class="window-header">
                     <div class="window-title">
@@ -722,6 +810,9 @@
                     <button class="taskbar-app" id="raigames-taskbar" title="라이 게임즈">
                         <div class="app-logo-mini rai-games-logo">🎮</div>
                     </button>
+                    <button class="taskbar-app hidden" id="rairanking-taskbar" title="라이 랭킹">
+                        <div class="app-logo-mini rai-ranking-logo">🏆</div>
+                    </button>
                     <button class="taskbar-app hidden" id="raibrickbreaker-taskbar" title="벽돌깨기">
                         <div class="app-logo-mini rai-bb-logo">🧱</div>
                     </button>
@@ -784,10 +875,15 @@
             </div>
         </div>
     </div>
+    <script src="firebase-config.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     <script src="system.js"></script>
     <script src="apps.js"></script>
     <script src="search.js"></script>
     <script src="games.js"></script>
+    <script src="auth-firebase.js"></script>
     <script src="main.js"></script>
 </body>
 </html>

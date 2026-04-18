@@ -322,3 +322,238 @@ body {
 .rai-timer-logo { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); }
 .rai-alarm-logo { background: linear-gradient(135deg, #8e2de2 0%, #4a00e0 100%); }
 .rai-notepad-logo { background: linear-gradient(135deg, #48c6ef 0%, #6f86d6 100%); box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+.rai-ranking-logo { background: linear-gradient(135deg, #f7971e 0%, #ffd200 100%); border: 1px solid rgba(255, 255, 255, 0.15); }
+
+.rai-auth-loading #desktop {
+    visibility: hidden;
+}
+
+.auth-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(ellipse at center, #1a2a3a 0%, #0a0e14 100%);
+}
+
+.auth-overlay.hidden {
+    display: none;
+}
+
+.auth-card {
+    width: min(400px, 92vw);
+    padding: 28px;
+    border-radius: 16px;
+    background: rgba(25, 30, 40, 0.92);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.55);
+}
+
+.auth-brand {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.auth-brand h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-top: 12px;
+    color: var(--font-color);
+}
+
+.auth-brand p {
+    font-size: 0.85rem;
+    opacity: 0.65;
+    margin-top: 6px;
+}
+
+.auth-logo {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #0062ff 0%, #003db3 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 1.4rem;
+    color: #fff;
+}
+
+.auth-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.auth-tab {
+    flex: 1;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.04);
+    color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.9rem;
+}
+
+.auth-tab.active {
+    background: rgba(0, 98, 255, 0.35);
+    border-color: rgba(0, 98, 255, 0.5);
+    color: #fff;
+}
+
+.auth-form.hidden {
+    display: none;
+}
+
+.auth-label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 500;
+    margin-bottom: 6px;
+    opacity: 0.85;
+}
+
+.auth-hint {
+    font-weight: 400;
+    opacity: 0.55;
+    font-size: 0.7rem;
+}
+
+.auth-input {
+    width: 100%;
+    padding: 10px 12px;
+    margin-bottom: 14px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: var(--input-bg);
+    color: var(--font-color);
+    font-family: inherit;
+    font-size: 0.95rem;
+}
+
+.auth-submit {
+    width: 100%;
+    margin-top: 4px;
+}
+
+.auth-error {
+    background: rgba(255, 80, 80, 0.15);
+    border: 1px solid rgba(255, 100, 100, 0.35);
+    color: #ffb4b4;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    margin-bottom: 12px;
+}
+
+.welcome-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(8px);
+}
+
+.welcome-overlay.hidden {
+    display: none;
+}
+
+.welcome-card {
+    text-align: center;
+    padding: 36px 40px;
+    border-radius: 16px;
+    background: rgba(30, 35, 48, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    max-width: 420px;
+}
+
+.welcome-card h2 {
+    font-size: 1.35rem;
+    margin-bottom: 12px;
+    color: var(--font-color);
+}
+
+.welcome-hint {
+    font-size: 0.9rem;
+    opacity: 0.75;
+    margin-bottom: 20px;
+}
+
+.settings-account-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.setting-item.danger-zone {
+    border-top: 1px solid rgba(255, 80, 80, 0.2);
+    padding-top: 16px;
+    margin-top: 8px;
+}
+
+.ranking-container {
+    padding: 16px 20px 24px;
+    max-height: calc(100vh - 120px);
+    overflow: auto;
+}
+
+.ranking-header h3 {
+    font-size: 1.1rem;
+    margin-bottom: 6px;
+}
+
+.ranking-header p {
+    font-size: 0.85rem;
+    opacity: 0.7;
+    margin-bottom: 16px;
+}
+
+.ranking-list-body {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.ranking-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    background: var(--card-bg);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.rank-medal {
+    min-width: 2rem;
+    text-align: center;
+    font-size: 1rem;
+}
+
+.rank-name {
+    flex: 1;
+    font-weight: 500;
+}
+
+.rank-cash {
+    font-variant-numeric: tabular-nums;
+    color: #ffd700;
+    font-weight: 600;
+}
+
+.ranking-empty {
+    text-align: center;
+    padding: 24px;
+    opacity: 0.6;
+    font-size: 0.9rem;
+}

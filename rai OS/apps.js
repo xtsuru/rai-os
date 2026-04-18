@@ -16,6 +16,7 @@ const appRegistry = {
     'styler': { id: 'styler', name: '라이 OS 꾸미기', logoClass: 'rai-styler-logo', logoChar: 'S+', type: 'paid', price: 100 },
     'browser': { id: 'browser', name: '라이 브라우저', logoClass: 'rai-browser-logo', logoChar: '🧭', type: 'free' },
     'games': { id: 'games', name: '라이 게임즈', logoClass: 'rai-games-logo', logoChar: '🎮', type: 'free' },
+    'ranking': { id: 'ranking', name: '라이 랭킹', logoClass: 'rai-ranking-logo', logoChar: '🏆', type: 'free' },
     'brickbreaker': { id: 'brickbreaker', name: '벽돌깨기', logoClass: 'rai-bb-logo', logoChar: '🧱', type: 'paid', price: 20, isGame: true },
     'minesweeper': { id: 'minesweeper', name: '지뢰찾기', logoClass: 'rai-ms-logo', logoChar: '💣', type: 'paid', price: 20, isGame: true }
 };
@@ -92,6 +93,7 @@ function handleUninstall(appKey) {
     if (appKey === 'notepad') {
         systemState.notes = [];
         localStorage.removeItem('rai_os_notes');
+        if (typeof window.raiClearNotepadCloud === 'function') window.raiClearNotepadCloud();
     } else if (appKey === 'cash') {
         systemState.raiCash = 0;
         localStorage.removeItem('rai_os_cash');
@@ -366,6 +368,14 @@ function setupWallpapers() {
     });
 }
 
+function persistNotes() {
+    if (typeof window.raiPersistNotes === 'function') {
+        window.raiPersistNotes();
+    } else {
+        localStorage.setItem('rai_os_notes', JSON.stringify(systemState.notes));
+    }
+}
+
 // 6. Notepad Logic
 const noteListContainer = document.getElementById('note-list');
 const notepadTitle = document.getElementById('notepad-title');
@@ -411,7 +421,7 @@ function saveNote() {
         systemState.notes.unshift(newNote);
         systemState.currentNoteId = newNote.id;
     }
-    localStorage.setItem('rai_os_notes', JSON.stringify(systemState.notes));
+    persistNotes();
     deleteNoteBtn.classList.remove('hidden');
     renderNoteList();
 }
@@ -419,7 +429,7 @@ function saveNote() {
 function deleteNote() {
     if (!confirm('삭제하시겠습니까?')) return;
     systemState.notes = systemState.notes.filter(n => n.id !== systemState.currentNoteId);
-    localStorage.setItem('rai_os_notes', JSON.stringify(systemState.notes));
+    persistNotes();
     systemState.currentNoteId = null;
     notepadTitle.value = '';
     notepadContent.value = '';

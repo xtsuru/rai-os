@@ -2,16 +2,6 @@
  * Rai OS - Core System
  */
 
-// --- Reset for Testing (Rainbow OS) ---
-// Comment these lines if you want the state to persist across refreshes
-localStorage.removeItem('rai_os_rainbow_unlocked');
-localStorage.removeItem('rai_os_cash');
-localStorage.removeItem('rai_os_game_brickbreaker_installed');
-localStorage.removeItem('rai_os_game_minesweeper_installed');
-if (localStorage.getItem('rai_os_theme') === 'theme-rainbow') {
-    localStorage.removeItem('rai_os_theme');
-}
-
 const systemState = {
     isStoreInstalled: true,
     isSettingsInstalled: true,
@@ -39,7 +29,11 @@ const systemState = {
     isWallpapersInstalled: false,
     fontScale: parseFloat(localStorage.getItem('rai_os_font_scale')) || 1.0,
     isBrickbreakerInstalled: localStorage.getItem('rai_os_game_brickbreaker_installed') === 'true',
-    isMinesweeperInstalled: localStorage.getItem('rai_os_game_minesweeper_installed') === 'true'
+    isMinesweeperInstalled: localStorage.getItem('rai_os_game_minesweeper_installed') === 'true',
+    firebaseUid: null,
+    userEmail: null,
+    displayUsername: '',
+    _skipCashCloud: false
 };
 
 function applyFontScale(scale) {
@@ -54,6 +48,7 @@ function updateCash(amount) {
     document.querySelectorAll('.cash-display-val').forEach(el => {
         el.textContent = systemState.raiCash.toLocaleString();
     });
+    if (typeof window.onCashUpdated === 'function') window.onCashUpdated();
 }
 
 function updateTheme(themeClass) {
@@ -87,10 +82,12 @@ function openWindow(id) {
         if (id === 'raigames' && typeof renderGamesHub === 'function') renderGamesHub();
         if (id === 'raibrickbreaker' && typeof initBrickBreaker === 'function') initBrickBreaker();
         if (id === 'raiminesweeper' && typeof initMinesweeper === 'function') initMinesweeper();
+        if (id === 'rairanking' && typeof window.startRankingListener === 'function') window.startRankingListener();
     }
 }
 
 function closeWindow(id) {
+    if (id === 'rairanking' && typeof window.stopRankingListener === 'function') window.stopRankingListener();
     const win = document.getElementById(`window-${id}`);
     if (win) win.classList.add('hidden');
 }
@@ -213,6 +210,4 @@ window.addEventListener('load', () => {
     Object.keys(appRegistry).forEach(updateStoreButtons);
     renderDesktopIcons();
     applyFontScale(systemState.fontScale);
-    // Auto-open tutorial on first load
-    setTimeout(() => openWindow('raitutorial'), 500);
 });
