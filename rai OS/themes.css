@@ -1,0 +1,58 @@
+/* Theme Management & Wallpapers */
+body.light-mode {
+    --taskbar-bg: rgba(255, 255, 255, 0.65);
+    --taskbar-border: rgba(0, 0, 0, 0.1);
+    --font-color: #000000;
+    --hover-bg: rgba(0, 0, 0, 0.08);
+    --window-bg: rgba(245, 245, 245, 0.8);
+    --window-header-bg: rgba(0, 0, 0, 0.03);
+    --card-bg: rgba(0, 0, 0, 0.04);
+    --input-bg: rgba(0, 0, 0, 0.06);
+    --sidebar-bg: rgba(0, 0, 0, 0.04);
+    --text-shadow: none;
+    --panel-bg: rgba(255, 255, 255, 0.9);
+    --alert-bg: rgba(255, 255, 255, 0.95);
+}
+
+/* CSS Variable Animation Support */
+@property --taskbar-bg { syntax: '<color>'; inherits: true; initial-value: rgba(20, 20, 20, 0.6); }
+@property --window-header-bg { syntax: '<color>'; inherits: true; initial-value: rgba(255, 255, 255, 0.05); }
+@property --accent-color { syntax: '<color>'; inherits: true; initial-value: #e53935; }
+
+/* OS Coloring Themes */
+body.theme-red { --taskbar-bg: rgba(229, 57, 53, 0.4); --window-header-bg: rgba(229, 57, 53, 0.2); --accent-color: #e53935; }
+body.theme-orange { --taskbar-bg: rgba(251, 140, 0, 0.4); --window-header-bg: rgba(251, 140, 0, 0.2); --accent-color: #fb8c00; }
+body.theme-yellow { --taskbar-bg: rgba(253, 216, 53, 0.4); --window-header-bg: rgba(253, 216, 53, 0.2); --accent-color: #fdd835; }
+body.theme-green { --taskbar-bg: rgba(67, 160, 71, 0.4); --window-header-bg: rgba(67, 160, 71, 0.2); --accent-color: #43a047; }
+body.theme-blue { --taskbar-bg: rgba(30, 136, 229, 0.4); --window-header-bg: rgba(30, 136, 229, 0.2); --accent-color: #1e88e5; }
+body.theme-indigo { --taskbar-bg: rgba(57, 73, 171, 0.4); --window-header-bg: rgba(57, 73, 171, 0.2); --accent-color: #3949ab; }
+body.theme-purple { --taskbar-bg: rgba(142, 36, 170, 0.4); --window-header-bg: rgba(142, 36, 170, 0.2); --accent-color: #8e24aa; }
+
+body.theme-rainbow {
+    animation: rainbowTheme 12s linear infinite;
+}
+
+@keyframes rainbowTheme {
+    0%   { --taskbar-bg: hsla(0, 75%, 55%, 0.4); --window-header-bg: hsla(0, 75%, 55%, 0.2); --accent-color: hsl(0, 75%, 55%); }
+    20%  { --taskbar-bg: hsla(72, 75%, 55%, 0.4); --window-header-bg: hsla(72, 75%, 55%, 0.2); --accent-color: hsl(72, 75%, 55%); }
+    40%  { --taskbar-bg: hsla(144, 75%, 55%, 0.4); --window-header-bg: hsla(144, 75%, 55%, 0.2); --accent-color: hsl(144, 75%, 55%); }
+    60%  { --taskbar-bg: hsla(216, 75%, 55%, 0.4); --window-header-bg: hsla(216, 75%, 55%, 0.2); --accent-color: hsl(216, 75%, 55%); }
+    80%  { --taskbar-bg: hsla(288, 75%, 55%, 0.4); --window-header-bg: hsla(288, 75%, 55%, 0.2); --accent-color: hsl(288, 75%, 55%); }
+    100% { --taskbar-bg: hsla(360, 75%, 55%, 0.4); --window-header-bg: hsla(360, 75%, 55%, 0.2); --accent-color: hsl(360, 75%, 55%); }
+}
+
+/* Gradient Wallpaper Definitions */
+#wallpaper.wp-grad-aurora { background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); }
+#wallpaper.wp-grad-ocean { background: linear-gradient(135deg, #2b5876, #4e4376); }
+#wallpaper.wp-grad-forest { background: linear-gradient(135deg, #134e5e, #71b280); }
+#wallpaper.wp-solid-black { background: #000; }
+#wallpaper.wp-solid-white { background: #fff; }
+#wallpaper.wp-grad-bw { background: linear-gradient(135deg, black 40%, #888 50%, white 60%); }
+
+/* Gradient Previews */
+.wp-preview.grad-aurora { background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); }
+.wp-preview.grad-ocean { background: linear-gradient(135deg, #2b5876, #4e4376); }
+.wp-preview.grad-forest { background: linear-gradient(135deg, #134e5e, #71b280); }
+.wp-preview.solid-black { background: #000; }
+.wp-preview.solid-white { background: #fff; border: 1px solid #ddd; }
+.wp-preview.grad-bw { background: linear-gradient(135deg, black 40%, #888 50%, white 60%); }

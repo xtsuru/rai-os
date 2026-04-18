@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rai OS</title>
+    <link rel="stylesheet" href="base.css">
+    <link rel="stylesheet" href="windows.css">
+    <link rel="stylesheet" href="apps.css">
+    <link rel="stylesheet" href="themes.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="desktop">
+        <div id="wallpaper"></div>
+        
+        <!-- Desktop Icons -->
+        <div id="icon-grid">
+            <!-- Dynamic icons will be rendered here via system.js -->
+        </div>
+
+        <!-- Rai Search Overlay -->
+        <div id="rai-search-overlay" class="search-overlay">
+            <div class="search-box">
+                <div class="search-input-wrapper">
+                    <svg class="search-icon-main" viewBox="0 0 24 24" width="24" height="24" fill="rgba(255,255,255,0.5)"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" fill="currentColor"/></svg>
+                    <input type="text" id="rai-search-input" placeholder="검색 또는 명령 입력 (앱, 메모, 웹...)" autocomplete="off" oninput="handleSearchInput(this.value)">
+                </div>
+                <div id="rai-search-results" class="search-results-list">
+                    <!-- Results will be rendered here -->
+                </div>
+                <div class="search-footer">
+                    <span><b>Enter</b> 실행</span>
+                    <span><b>↑ ↓</b> 이동</span>
+                    <span><b>Esc</b> 닫기</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Window Layer -->
+        <div id="window-layer">
+            <!-- Rai Store Window -->
+            <div class="window hidden" id="window-raistore">
+                <div class="window-header">
+                    <div class="window-title">
+                        <div class="app-logo-mini rai-store-logo" style="margin-right: 8px;">L</div>
+                        라이 스토어
+                    </div>
+                    <div class="window-controls">
+                        <button class="win-btn maximize-btn" onclick="toggleMaximize('raistore')"></button>
+                        <button class="win-btn close-btn" onclick="closeWindow('raistore')">&times;</button>
+                    </div>
+                </div>
+                <div class="window-content">
+                    <div class="store-hero">
+                        <h2>인기 애플리케이션</h2>
+                    </div>
+                    <div class="app-list">
+                        <!-- Store App -->
+                        <div class="store-app-card">
+                            <div class="app-logo rai-store-logo">L</div>
+                            <div class="app-info">
+                                <div class="app-name-large">라이 스토어</div>
+                                <div class="app-desc">앱을 탐색하고 설치 및 관리합니다.</div>
+                            </div>
+                            <div id="btn-container-store" class="app-btn-container"></div>
+                        </div>
+                        <!-- Settings App -->
+                        <div class="store-app-card">
+                            <div class="app-logo rai-settings-logo">S</div>
+                            <div class="app-info">
+                                <div class="app-name-large">라이 설정</div>
+                                <div class="app-desc">시스템 환경 설정을 변경합니다.</div>
+                            </div>
+                            <div id="btn-container-settings" class="app-btn-container"></div>
+                        </div>
+                        <!-- Tutorial App -->
+                        <div class="store-app-card">
+                            <div class="app-logo rai-tutorial-logo">?</div>
+                            <div class="app-info">
+                                <div class="app-name-large">라이 튜토리얼</div>
+                                <div class="app-desc">Rai OS의 기본 기능들을 배워보세요.</div>
+                            </div>
+                            <div id="btn-container-tutorial" class="app-btn-container"></div>
+                        </div>
+                        <!-- Notepad App -->
+                        <div class="store-app-card">
+                            <div class="app-logo rai-notepad-logo">N</div>
+                            <div class="app-info">
+                                <div class="app-name-large">라이 메모장</div>
+                                <div class="app-desc">심플하고 강력한 메모 작성을 경험해보세요.</div>
+                            </div>
+                            <div id="btn-container-notepad" class="app-btn-container"></div>
+                        </div>
+                        <div class="store-app-card">
+                            <div class="app-logo rai-timer-logo">T</div>
+                            <div class="app-info">
+                                <div class="app-name-large">라이 타이머</div>
+                                <div class="app-desc">정확한 시간 측정을 위한 전문 도구입니다.</div>
+                            </div>
+                            <div id="btn-container-timer" class="app-btn-container"></div>
+                        </div>
+                        <div class="store-app-card">
+                            <div class="app-logo rai-alarm-logo">A</div>
+                            <div class="app-info">
+                                <div class="app-name-large">라이 알람</div>
+                                <div class="app-desc">중요한 일정을 놓치지 않게 알려드립니다.</div>
+                            </div>
+                            <div id="btn-container-alarm" class="app-btn-container"></div>
+                        </div>
+                        <div class="store-app-card">
+                            <div class="app-logo rai-wallpapers-logo">W</div>
+                            <div class="app-info">
+                                <div class="app-name-large">라이 바탕화면</div>
+                                <div class="app-desc">아름다운 배경화면으로 나만의 OS를 꾸며보세요.</div>
+                            </div>
+                            <div id="btn-container-wallpapers" class="app-btn-container"></div>
+                        </div>
+                        <div class="store-app-card">
+                            <div class="app-logo rai-cash-logo">C</div>
+                            <div class="app-info">
+                                <div class="app-name-large">라이 캐시</div>
+                                <div class="app-desc">캐시를 발굴하여 특별한 앱을 구매해보세요.</div>
+                            </div>
+                            <div id="btn-container-cash" class="app-btn-container"></div>
+                        </div>
+                        <div class="store-app-card">
+                            <div class="app-logo rai-wallpapers-plus-logo">W+</div>
+                            <div class="app-info">
+                                <div class="app-name-large">라이 바탕화면+</div>
+                                <div class="app-desc" style="color: #ffd700; font-weight: 600;">가격: 100 라이 캐시</div>
+                                <div class="app-desc">프리미엄 이미지 배경화면 패키지입니다.</div>
+                            </div>
+                            <div id="btn-container-wallpapersplus" class="app-btn-container"></div>
+                        </div>
+                        <div class="store-app-card">
+                            <div class="app-logo rai-styler-logo">S+</div>
+                            <div class="app-info">
+                                <div class="app-name-large">라이 OS 꾸미기</div>
+                                <div class="app-desc" style="color: #ffd700; font-weight: 600;">가격: 100 라이 캐시</div>
+                                <div class="app-desc">시스템의 테마 색상을 자유롭게 변경해보세요.</div>
+                            </div>
+                            <div id="btn-container-styler" class="app-btn-container"></div>
+                        </div>
+                        <!-- Browser App -->
+                        <div class="store-app-card">
+                            <div class="app-logo rai-browser-logo">🧭</div>
+                            <div class="app-info">
+                                <div class="app-name-large">라이 브라우저</div>
+                                <div class="app-desc">웹 서핑과 키워드 검색을 위한 포털 앱입니다.</div>
+                            </div>
+                            <div id="btn-container-browser" class="app-btn-container"></div>
+                        </div>
+                        <!-- Games App -->
+                        <div class="store-app-card">
+                            <div class="app-logo rai-games-logo">🎮</div>
+                            <div class="app-info">
+                                <div class="app-name-large">라이 게임즈</div>
+                                <div class="app-desc">다양한 라이 시리즈 게임들을 즐겨보세요!</div>
+                            </div>
+                            <div id="btn-container-games" class="app-btn-container"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rai Tutorial Window -->
+            <div class="window hidden" id="window-raitutorial">
+                <div class="window-header">
+                    <div class="window-title">
+                        <div class="app-logo-mini rai-tutorial-logo" style="margin-right: 8px;">?</div>
+                        라이 튜토리얼
+                    </div>
+                    <div class="window-controls">
+                        <button class="win-btn maximize-btn" onclick="toggleMaximize('raitutorial')"></button>
+                        <button class="win-btn close-btn" onclick="closeWindow('raitutorial')">&times;</button>
+                    </div>
+                </div>
+                <div class="window-content tutorial-container" id="tutorial-steps-container">
+                    <!-- Step 1: Welcome -->
+                    <div class="tutorial-step active" data-step="1">
+                        <div class="tutorial-hero">
+                            <div class="tutorial-logo-large rai-tutorial-logo">?</div>
+                            <h2>어서오세요! Rai OS 입니다</h2>
+                            <p>웹에서 만나는 가장 현대적이고 아름다운 운영체제 가이드를 시작합니다.</p>
+                        </div>
+                        <div class="tutorial-body">
+                            <p>Rai OS는 단순한 웹페이지를 넘어, 실제 운영체제와 같은 사용자 경험을 제공하기 위해 설계되었습니다. 이 튜토리얼을 통해 모든 기능을 마스터하실 수 있습니다.</p>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Desktop icons -->
+                    <div class="tutorial-step" data-step="2">
+                        <div class="tutorial-header-icon rai-store-logo">L</div>
+                        <h3>01. 데스크탑과 아이콘</h3>
+                        <p>바탕화면은 <b>아이콘 그리드 시스템</b>으로 관리됩니다. 모든 아이콘은 '라이 스토어'에서 설치하거나 삭제할 수 있으며, 삭제 시 해당 앱의 데이터까지 완벽하게 보호(삭제)됩니다.</p>
+                        <ul class="tutorial-list">
+                            <li>아이콘 클릭 시 해당 애플리케이션 창이 열립니다.</li>
+                            <li>설치된 앱은 작업 표시줄에도 고정할 수 있습니다.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Step 3: Taskbar -->
+                    <div class="tutorial-step" data-step="3">
+                        <div class="tutorial-header-icon" style="background: rgba(255,255,255,0.1); border: 1px solid var(--taskbar-border);">
+                            <svg viewBox="0 0 24 24" width="24" height="24" fill="white"><path d="M3 3H11V11H3V3ZM13 3H21V11H13V3ZM3 13H11V21H3V13ZM13 13H21V21H13V13Z" fill="currentColor"/></svg>
+                        </div>
+                        <h3>02. 작업 표시줄 (Taskbar)</h3>
+                        <p>하단의 작업 표시줄은 시스템의 신경 센터입니다.</p>
+                        <ul class="tutorial-list">
+                            <li><b>시작 버튼</b>: 시스템 메뉴를 준비 중입니다.</li>
+                            <li><b>고정된 앱</b>: 자주 쓰는 앱을 한 번의 클릭으로 실행합니다.</li>
+                            <li><b>시스템 트레이</b>: 시계, 날짜 및 실시간 캐시 잔액을 확인하세요.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Step 4: Window Management -->
+                    <div class="tutorial-step" data-step="4">
+                        <div class="tutorial-header-icon" style="background: #0062ff;">
+                            <svg viewBox="0 0 24 24" width="24" height="24" fill="white"><path d="M4 4h16v16H4V4zm2 4v10h12V8H6z" fill="currentColor"/></svg>
+                        </div>
+                        <h3>03. 강력한 창 관리 시스템</h3>
+                        <p>멀티태스킹을 위한 완벽한 창 관리 기능을 제공합니다.</p>
+                        <ul class="tutorial-list">
+                            <li><b>드래그</b>: 상단 헤더를 잡아 어디로든 이동하세요.</li>
+                            <li><b>최대화</b>: 버튼을 누르거나 헤더를 더블 클릭하여 전체화면을 즐기세요.</li>
+                            <li><b>포커스</b>: 창을 클릭하면 가장 앞으로 튀어나오며 제어권이 넘어옵니다.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Step 5: Update Log -->
+                    <div class="tutorial-step" data-step="5">
+                        <div class="tutorial-header-icon" style="background: #ff5252;">
+                            <svg viewBox="0 0 24 24" width="24" height="24" fill="white"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z" fill="currentColor"/></svg>
+                        </div>
+                        <h3>04. 알림 및 업데이트 로그</h3>
+                        <p>시스템 우측 하단의 종 아이콘을 클릭해 보세요.</p>
+                        <p>현재 버전인 <b>v0.1.0</b>의 변경 사항뿐만 아니라, 앞으로 추가될 새로운 기능들에 대한 소식을 가장 먼저 접할 수 있습니다.</p>
+                    </div>
+
+                    <!-- Step 6: Economics -->
+                    <div class="tutorial-step" data-step="6">
+                        <div class="tutorial-header-icon rai-cash-logo">C</div>
+                        <h3>05. 라이 캐시와 경제</h3>
+                        <p>Door OS만의 전용 화폐, <b>라이 캐시(C)</b> 시스템입니다.</p>
+                        <ul class="tutorial-list">
+                            <li><b>채굴</b>: 라이 캐시 앱에서 보석을 클릭하여 캐시를 획득하세요.</li>
+                            <li><b>쿨다운</b>: 한 번 발굴 후에는 잠시 충전 시간이 필요합니다.</li>
+                            <li><b>사용</b>: 모은 캐시로 스토어에서 유료 앱을 구매하거나 특별한 기능을 해제하세요.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Step 7: Store Policy -->
+                    <div class="tutorial-step" data-step="7">
+                        <div class="tutorial-header-icon rai-store-logo">L</div>
+                        <h3>06. 라이 스토어와 삭제 정책</h3>
+                        <p>기본 앱을 포함한 모든 앱은 스토어에서 통합 관리됩니다.</p>
+                        <p>⚠️ <b>주의</b>: 앱을 삭제하면 해당 앱에 저장된 모든 데이터(메모, 캐시 잔액 등)가 초기화됩니다. 신중하게 선택하세요!</p>
+                    </div>
+
+                    <!-- Step 8: Customization -->
+                    <div class="tutorial-step" data-step="8">
+                        <div class="tutorial-header-icon rai-styler-logo">S+</div>
+                        <h3>07. 나만의 스타일 커스터마이징</h3>
+                        <p>지루한 화면은 이제 그만! 두 가지 방법으로 OS를 꾸밀 수 있습니다.</p>
+                        <ul class="tutorial-list">
+                            <li><b>라이 설정</b>: 라이트 모드와 다크 모드 중 선택하세요.</li>
+                            <li><b>라이 OS 꾸미기</b>: 시스템의 포인트 색상을 8가지 색상 중 하나로 바꿀 수 있습니다.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Step 9: Rainbow OS -->
+                    <div class="tutorial-step" data-step="9">
+                        <div class="tutorial-header-icon" style="background: linear-gradient(to right, red,orange,yellow,green,blue,indigo,violet);">🌈</div>
+                        <h3>08. 궁극의 무지개 OS 모드</h3>
+                        <p>최고의 경험을 원하는 사용자를 위한 모드입니다.</p>
+                        <p>100 캐시를 모아 <b>무지개 OS 모드</b>를 해제하면, 시스템 전체가 실시간으로 색상이 변하는 황홀한 애니메이션을 경험할 수 있습니다.</p>
+                    </div>
+
+                    <!-- Step 10: Conclusion -->
+                    <div class="tutorial-step" data-step="10">
+                        <div class="tutorial-hero">
+                            <h2>이제 모든 준비가 끝났습니다!</h2>
+                            <p>Rai OS의 무한한 가능성을 직접 탐험해 보세요.</p>
+                        </div>
+                        <div class="tutorial-body" style="text-align: center;">
+                            <p>앞으로도 라이 시리즈 앱들은 계속해서 업데이트될 예정입니다. 편리하고 아름다운 디지털 라이프를 Rai OS와 함께하세요!</p>
+                        </div>
+                    </div>
+
+                    <div class="tutorial-footer">
+                        <button id="tutorial-prev" class="action-btn hidden">이전</button>
+                        <button id="tutorial-next" class="action-btn primary">시작하기</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rai Timer Window -->
+            <div class="window hidden" id="window-raitimer">
+                <div class="window-header">
+                    <div class="window-title">
+                        <div class="app-logo-mini rai-timer-logo" style="margin-right: 8px;">T</div>
+                        라이 타이머
+                    </div>
+                    <div class="window-controls">
+                        <button class="win-btn maximize-btn" onclick="toggleMaximize('raitimer')"></button>
+                        <button class="win-btn close-btn" onclick="closeWindow('raitimer')">&times;</button>
+                    </div>
+                </div>
+                <div class="window-content timer-container">
+                    <div id="timer-display">00:00:00</div>
+                    <div class="timer-controls">
+                        <button id="timer-start" class="action-btn primary">시작</button>
+                        <button id="timer-stop" class="action-btn">중지</button>
+                        <button id="timer-reset" class="action-btn">리셋</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rai Alarm Window -->
+            <div class="window hidden" id="window-raialarm">
+                <div class="window-header">
+                    <div class="window-title">
+                        <div class="app-logo-mini rai-alarm-logo" style="margin-right: 8px;">A</div>
+                        라이 알람
+                    </div>
+                    <div class="window-controls">
+                        <button class="win-btn maximize-btn" onclick="toggleMaximize('raialarm')"></button>
+                        <button class="win-btn close-btn" onclick="closeWindow('raialarm')">&times;</button>
+                    </div>
+                </div>
+                <div class="window-content alarm-container">
+                    <div class="alarm-setup">
+                        <h3>알람 지정</h3>
+                        <input type="time" id="alarm-time-input" class="alarm-input">
+                        <button id="set-alarm-btn" class="action-btn primary">알람 설정</button>
+                    </div>
+                    <div id="active-alarm-info" class="hidden">
+                        <p>설정된 알람: <span id="set-time-display">--:--</span></p>
+                        <button id="cancel-alarm-btn" class="action-btn danger">알람 취소</button>
+                        <button class="action-btn" onclick="closeWindow('raialarm')">나가기</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Alarm Alert Overlay -->
+            <div id="alarm-alert-overlay" class="hidden">
+                <div class="alert-box">
+                    <div class="alert-icon rai-alarm-logo">A</div>
+                    <h2>알람 울림!</h2>
+                    <div id="alert-time-text">00:00</div>
+                    <button id="dismiss-alarm-btn" class="action-btn primary">알람 끄기</button>
+                    <button class="action-btn" onclick="document.getElementById('alarm-alert-overlay').classList.add('hidden')">나가기</button>
+                </div>
+            </div>
+
+            <!-- Rai Notepad Window -->
+            <div class="window hidden" id="window-rainotepad">
+                <div class="window-header">
+                    <div class="window-title">
+                        <div class="app-logo-mini rai-notepad-logo" style="margin-right: 8px;">N</div>
+                        라이 메모장
+                    </div>
+                    <div class="window-controls">
+                        <button class="win-btn maximize-btn" onclick="toggleMaximize('rainotepad')"></button>
+                        <button class="win-btn close-btn" onclick="closeWindow('rainotepad')">&times;</button>
+                    </div>
+                </div>
+                <div class="window-content notepad-container">
+                    <div class="notepad-sidebar">
+                        <div class="sidebar-header">
+                            <button id="new-note-btn" class="sidebar-new-btn">+ 새 메모</button>
+                        </div>
+                        <div id="note-list" class="note-list">
+                            <!-- Notes will be rendered here -->
+                             <div class="empty-notes">아직 메모가 없습니다</div>
+                        </div>
+                    </div>
+                    <div class="notepad-main">
+                        <input type="text" id="notepad-title" placeholder="제목을 입력하세요..." class="notepad-input">
+                        <textarea id="notepad-content" placeholder="내용을 입력하세요..." class="notepad-textarea"></textarea>
+                        <div class="notepad-footer">
+                            <button id="save-note-btn" class="action-btn primary">저장</button>
+                            <button id="delete-note-btn" class="action-btn danger hidden">삭제</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rai Settings Window -->
+            <div class="window hidden" id="window-raisettings">
+                <div class="window-header">
+                    <div class="window-title">
+                        <div class="app-logo-mini rai-settings-logo" style="margin-right: 8px;">S</div>
+                        라이 설정
+                    </div>
+                    <div class="window-controls">
+                        <button class="win-btn maximize-btn" onclick="toggleMaximize('raisettings')"></button>
+                        <button class="win-btn close-btn" onclick="closeWindow('raisettings')">&times;</button>
+                    </div>
+                </div>
+                <div class="window-content settings-container">
+                    <div class="settings-group">
+                        <h3>개인 설정</h3>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-name">테마 모드</div>
+                                <div class="setting-desc">다크 모드와 화이트 모드를 전환합니다.</div>
+                            </div>
+                            <div class="toggle-switch">
+                                <button id="theme-toggle-btn" class="action-btn">라이트 모드 전환</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="settings-group">
+                        <h3>디스플레이 설정</h3>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-name">텍스트 크기</div>
+                                <div class="setting-desc">시스템 전체의 텍스트 크기를 조절합니다.</div>
+                            </div>
+                            <div class="slider-control" style="display: flex; align-items: center; gap: 15px;">
+                                <input type="range" id="font-size-slider" min="0.8" max="1.5" step="0.01" value="1.0" style="width: 150px; cursor: pointer;">
+                                <button id="reset-font-btn" class="action-btn">초기화</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rai OS Styler Window -->
+            <div class="window hidden" id="window-raistyler">
+                <div class="window-header">
+                    <div class="window-title">
+                        <div class="app-logo-mini rai-styler-logo" style="margin-right: 8px;">S+</div>
+                        라이 OS 꾸미기
+                    </div>
+                    <div class="window-controls">
+                        <button class="win-btn maximize-btn" onclick="toggleMaximize('raistyler')"></button>
+                        <button class="win-btn close-btn" onclick="closeWindow('raistyler')">&times;</button>
+                    </div>
+                </div>
+                <div class="window-content styler-container">
+                    <div class="styler-header">
+                        <h3>시스템 테마 색상</h3>
+                        <p>원하는 색상을 선택하여 시스템 분위기를 바꿔보세요.</p>
+                    </div>
+                    <div class="theme-grid">
+                        <div class="theme-swatch default" onclick="updateTheme('')" title="기본 다크/라이트">
+                            <div class="swatch-inner"></div>
+                            <span>기본</span>
+                        </div>
+                        <div class="theme-swatch red" onclick="updateTheme('theme-red')" title="빨간색">
+                            <div class="swatch-inner"></div>
+                            <span>빨강</span>
+                        </div>
+                        <div class="theme-swatch orange" onclick="updateTheme('theme-orange')" title="주황색">
+                            <div class="swatch-inner"></div>
+                            <span>주황</span>
+                        </div>
+                        <div class="theme-swatch yellow" onclick="updateTheme('theme-yellow')" title="노란색">
+                            <div class="swatch-inner"></div>
+                            <span>노랑</span>
+                        </div>
+                        <div class="theme-swatch green" onclick="updateTheme('theme-green')" title="초록색">
+                            <div class="swatch-inner"></div>
+                            <span>초록</span>
+                        </div>
+                        <div class="theme-swatch blue" onclick="updateTheme('theme-blue')" title="파란색">
+                            <div class="swatch-inner"></div>
+                            <span>파랑</span>
+                        </div>
+                        <div class="theme-swatch indigo" onclick="updateTheme('theme-indigo')" title="남색">
+                            <div class="swatch-inner"></div>
+                            <span>남색</span>
+                        </div>
+                        <div class="theme-swatch purple" onclick="updateTheme('theme-purple')" title="보라색">
+                            <div class="swatch-inner"></div>
+                            <span>보라</span>
+                        </div>
+                    </div>
+                    
+                    <div class="premium-divider"></div>
+                    
+                    <div class="rainbow-section">
+                        <div class="rainbow-info">
+                            <h4>무지개 OS 모드</h4>
+                            <p>시스템 색상이 실시간으로 계속해서 변하는 특별한 모드입니다.</p>
+                        </div>
+                        <button id="unlock-rainbow-btn" class="rainbow-action-btn">
+                            <div class="btn-lock-icon">🔒</div>
+                            <span class="btn-text">무지개 모드 해제 (100 캐시)</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="window hidden" id="window-raicash">
+                <div class="window-header">
+                    <div class="window-title">
+                        <div class="app-logo-mini rai-cash-logo" style="margin-right: 8px;">C</div>
+                        라이 캐시
+                    </div>
+                    <div class="window-controls">
+                        <button class="win-btn maximize-btn" onclick="toggleMaximize('raicash')"></button>
+                        <button class="win-btn close-btn" onclick="closeWindow('raicash')">&times;</button>
+                    </div>
+                </div>
+                <div class="window-content cash-container">
+                    <button id="admin-h-btn" class="admin-hidden-btn" title="Admin Mode">h</button>
+                    <div class="cash-stat">
+                        <span class="label">보유 캐시</span>
+                        <div class="value"><span class="cash-display-val">0</span> <small>C</small></div>
+                    </div>
+                    <div class="mining-area">
+                        <button id="mine-button" class="mine-btn">
+                            <div class="btn-content">
+                                <div class="mine-icon">💎</div>
+                                <span>캐시 발굴</span>
+                            </div>
+                            <div class="cooldown-overlay"></div>
+                        </button>
+                        <div id="mine-status" class="mine-status">대기 중...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rai Wallpapers Window -->
+            <div class="window hidden" id="window-raiwallpapers">
+                <div class="window-header">
+                    <div class="window-title">
+                        <div class="app-logo-mini rai-wallpapers-logo" style="margin-right: 8px;">W</div>
+                        라이 바탕화면
+                    </div>
+                    <div class="window-controls">
+                        <button class="win-btn maximize-btn" onclick="toggleMaximize('raiwallpapers')"></button>
+                        <button class="win-btn close-btn" onclick="closeWindow('raiwallpapers')">&times;</button>
+                    </div>
+                </div>
+                <div class="window-content wallpaper-container">
+                    <div class="wallpaper-grid">
+                        <div class="wallpaper-thumb active" data-wp="class:wp-grad-aurora">
+                            <div class="wp-preview grad-aurora"></div>
+                            <span>심야 오로라</span>
+                        </div>
+                        <div class="wallpaper-thumb" data-wp="class:wp-grad-ocean">
+                            <div class="wp-preview grad-ocean"></div>
+                            <span>깊은 바다</span>
+                        </div>
+                        <div class="wallpaper-thumb" data-wp="class:wp-grad-forest">
+                            <div class="wp-preview grad-forest"></div>
+                            <span>비밀의 숲</span>
+                        </div>
+                        <div class="wallpaper-thumb" data-wp="class:wp-solid-black">
+                            <div class="wp-preview solid-black"></div>
+                            <span>올 블랙</span>
+                        </div>
+                        <div class="wallpaper-thumb" data-wp="class:wp-solid-white">
+                            <div class="wp-preview solid-white"></div>
+                            <span>퓨어 화이트</span>
+                        </div>
+                        <div class="wallpaper-thumb" data-wp="class:wp-grad-bw">
+                            <div class="wp-preview grad-bw"></div>
+                            <span>블랙 & 화이트</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rai Wallpapers+ Window -->
+            <div class="window hidden" id="window-raiwallpapersplus">
+                <div class="window-header">
+                    <div class="window-title">
+                        <div class="app-logo-mini rai-wallpapers-plus-logo" style="margin-right: 8px;">W+</div>
+                        라이 바탕화면+
+                    </div>
+                    <div class="window-controls">
+                        <button class="win-btn maximize-btn" onclick="toggleMaximize('raiwallpapersplus')"></button>
+                        <button class="win-btn close-btn" onclick="closeWindow('raiwallpapersplus')">&times;</button>
+                    </div>
+                </div>
+                <div class="window-content wallpaper-container">
+                    <div class="wallpaper-plus-header">
+                        <h3>프리미엄 이미지 컬렉션</h3>
+                    </div>
+                    <div class="wallpaper-grid">
+                        <div class="wallpaper-thumb" data-wp="wallpaper.png">
+                            <div class="wp-preview" style="background-image: url('wallpaper.png');"></div>
+                            <span>기본 배경</span>
+                        </div>
+                        <div class="wallpaper-thumb" data-wp="wallpaper2.png">
+                            <div class="wp-preview" style="background-image: url('wallpaper2.png');"></div>
+                            <span>블루 퍼플</span>
+                        </div>
+                        <div class="wallpaper-thumb" data-wp="wallpaper3.png">
+                            <div class="wp-preview" style="background-image: url('wallpaper3.png');"></div>
+                            <span>노을 한 조각</span>
+                        </div>
+                        <div class="wallpaper-thumb" data-wp="wallpaper4.png">
+                            <div class="wp-preview" style="background-image: url('wallpaper4.png');"></div>
+                            <span>에메랄드 숲</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="window hidden" id="window-raibrowser">
+                <div class="window-header">
+                    <div class="window-title">
+                        <div class="app-logo-mini rai-browser-logo" style="margin-right: 8px;">🧭</div>
+                        라이 브라우저
+                    </div>
+                    <div class="window-controls">
+                        <button class="win-btn maximize-btn" onclick="toggleMaximize('raibrowser')"></button>
+                        <button class="win-btn close-btn" onclick="closeWindow('raibrowser')">&times;</button>
+                    </div>
+                </div>
+                <div class="window-content browser-container">
+                    <div class="browser-address-bar">
+                        <div class="address-input-wrapper">
+                            <span class="lock-icon">🔒</span>
+                            <input type="text" id="browser-url-input" placeholder="Google 검색 또는 URL 입력" onkeydown="if(event.key==='Enter') openWebSearch('google', this.value)">
+                        </div>
+                    </div>
+                    <div class="browser-hero">
+                        <div class="browser-logo-large">🧭</div>
+                        <h2>웹의 세계로 연결합니다</h2>
+                        <p>원하는 검색 엔진을 선택하거나 키워드를 입력하세요.</p>
+                    </div>
+                    <div class="quick-engines">
+                        <div class="engine-card" onclick="openWebSearch('google', document.getElementById('browser-url-input').value || '개발자 툴')">
+                            <div class="engine-icon google">G</div>
+                            <span>Google</span>
+                        </div>
+                        <div class="engine-card" onclick="openWebSearch('naver', document.getElementById('browser-url-input').value || '날씨')">
+                            <div class="engine-icon naver">N</div>
+                            <span>Naver</span>
+                        </div>
+                        <div class="engine-card" onclick="openWebSearch('youtube', document.getElementById('browser-url-input').value || '음악')">
+                            <div class="engine-icon youtube">Y</div>
+                            <span>YouTube</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rai Games (Game Store) Window -->
+            <div class="window hidden" id="window-raigames">
+                <div class="window-header">
+                    <div class="window-title">
+                        <div class="app-logo-mini rai-games-logo" style="margin-right: 8px;">🎮</div>
+                        라이 게임즈
+                    </div>
+                    <div class="window-controls">
+                        <button class="win-btn maximize-btn" onclick="toggleMaximize('raigames')"></button>
+                        <button class="win-btn close-btn" onclick="closeWindow('raigames')">&times;</button>
+                    </div>
+                </div>
+                <div class="window-content games-store-container" id="games-store-hub">
+                    <!-- Game store cards rendered via renderGamesHub() -->
+                </div>
+            </div>
+
+            <!-- Standalone Game: Brick Breaker -->
+            <div class="window hidden" id="window-raibrickbreaker">
+                <div class="window-header">
+                    <div class="window-title">
+                        <div class="app-logo-mini rai-bb-logo" style="margin-right: 8px;">🧱</div>
+                        벽돌깨기
+                    </div>
+                    <div class="window-controls">
+                        <button class="win-btn maximize-btn" onclick="toggleMaximize('raibrickbreaker')"></button>
+                        <button class="win-btn close-btn" onclick="closeWindow('raibrickbreaker')">&times;</button>
+                    </div>
+                </div>
+                <div class="window-content" id="bb-game-view">
+                    <!-- Game content rendered via initBrickBreakerStandAlone() -->
+                </div>
+            </div>
+
+            <!-- Standalone Game: Minesweeper -->
+            <div class="window hidden" id="window-raiminesweeper">
+                <div class="window-header">
+                    <div class="window-title">
+                        <div class="app-logo-mini rai-ms-logo" style="margin-right: 8px;">💣</div>
+                        지뢰찾기
+                    </div>
+                    <div class="window-controls">
+                        <button class="win-btn maximize-btn" onclick="toggleMaximize('raiminesweeper')"></button>
+                        <button class="win-btn close-btn" onclick="closeWindow('raiminesweeper')">&times;</button>
+                    </div>
+                </div>
+                <div class="window-content" id="ms-game-view">
+                    <!-- Game content rendered via initMinesweeperStandAlone() -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Taskbar -->
+        <nav id="taskbar">
+            <div id="taskbar-left">
+                <button id="start-button" title="Start">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3 3H11V11H3V3Z" fill="white"/>
+                        <path d="M13 3H21V11H13V3Z" fill="white"/>
+                        <path d="M3 13H11V21H3V13Z" fill="white"/>
+                        <path d="M13 13H21V21H13V13Z" fill="white"/>
+                    </svg>
+                </button>
+                <div id="pinned-apps">
+                    <button class="taskbar-app" id="rai-search-taskbar" title="검색 (Cmd+K)">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="white"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" fill="currentColor"/></svg>
+                    </button>
+                    <button class="taskbar-app" id="raistore-taskbar" title="라이 스토어">
+                        <div class="app-logo-mini rai-store-logo">L</div>
+                    </button>
+                    <button class="taskbar-app" id="raibrowser-taskbar" title="라이 브라우저">
+                        <div class="app-logo-mini rai-browser-logo">🧭</div>
+                    </button>
+                    <button class="taskbar-app" id="raigames-taskbar" title="라이 게임즈">
+                        <div class="app-logo-mini rai-games-logo">🎮</div>
+                    </button>
+                    <button class="taskbar-app hidden" id="raibrickbreaker-taskbar" title="벽돌깨기">
+                        <div class="app-logo-mini rai-bb-logo">🧱</div>
+                    </button>
+                    <button class="taskbar-app hidden" id="raiminesweeper-taskbar" title="지뢰찾기">
+                        <div class="app-logo-mini rai-ms-logo">💣</div>
+                    </button>
+                </div>
+            </div>
+
+            <div id="taskbar-center">
+                <div class="taskbar-search-wrapper">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="rgba(255,255,255,0.7)"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" fill="currentColor"/></svg>
+                    <input type="text" id="taskbar-search-input" placeholder="검색하려면 여기에 입력하십시오." autocomplete="off">
+                </div>
+            </div>
+
+            <div id="taskbar-right">
+                <div id="system-tray">
+                    <div id="rai-cash-tray" class="tray-pill">
+                        <span class="cash-icon">💰</span>
+                        <span class="cash-display-val">0</span>
+                    </div>
+                    <div id="tray-icons">
+                        <div id="alarm-indicator" class="hidden" title="Active Alarm">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="white">
+                                <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
+                            </svg>
+                            <span id="alarm-time-tray">14:00</span>
+                        </div>
+                    </div>
+                    <div id="clock-container" title="Date and Time">
+                        <span id="time">12:00 PM</span>
+                        <span id="date">2026-04-11</span>
+                    </div>
+                    <button id="notification-button" title="Notifications">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 22C13.1 22 14 21.1 14 20H10C10 21.1 10.9 22 12 22ZM18 16V11C18 7.93 16.37 5.36 13.5 4.68V4C13.5 3.17 12.83 2.5 12 2.5C11.17 2.5 10.5 3.17 10.5 4V4.68C7.64 5.36 6 7.92 6 11V16L4 18V19H20V18L18 16Z" fill="white"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Update Log Panel -->
+        <div id="update-log-panel" class="hidden">
+            <div class="panel-header">
+                <h3>Update Log</h3>
+                <button id="close-log">&times;</button>
+            </div>
+            <div class="panel-content">
+                <div class="update-item">
+                    <span class="version">v0.1.0</span>
+                    <span class="date">2026-04-11</span>
+                    <ul>
+                        <li>Initial Desktop UI implemented</li>
+                        <li>Live Clock & Date added</li>
+                        <li>Glassmorphism Taskbar support</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="system.js"></script>
+    <script src="apps.js"></script>
+    <script src="search.js"></script>
+    <script src="games.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>

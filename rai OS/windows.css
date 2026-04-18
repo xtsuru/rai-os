@@ -1,0 +1,108 @@
+/* Window System */
+#window-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: calc(100% - 48px);
+    pointer-events: none;
+    z-index: 50;
+}
+
+.window {
+    position: absolute;
+    top: 50px;
+    left: 50px;
+    width: 600px;
+    height: 400px;
+    background: var(--window-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--taskbar-border);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+    pointer-events: auto;
+    overflow: hidden;
+    animation: windowOpen 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.window.hidden { display: none; }
+
+.window.maximized {
+    width: 100% !important;
+    height: calc(100vh - 48px) !important;
+    top: 0 !important;
+    left: 0 !important;
+    border-radius: 0;
+    z-index: 1000 !important;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes windowOpen {
+    from { opacity: 0; transform: scale(0.9) translateY(20px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.window-header {
+    padding: 12px 16px;
+    background: var(--window-header-bg);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: default;
+    border-bottom: 1px solid var(--taskbar-border);
+}
+
+.window-title {
+    display: flex;
+    align-items: center;
+    color: var(--font-color);
+    font-size: calc(13px * var(--font-scale));
+    font-weight: 600;
+}
+
+.window-controls {
+    display: flex;
+    gap: 8px;
+}
+
+.win-btn {
+    width: 28px;
+    height: 28px;
+    border: none;
+    background: transparent;
+    color: var(--font-color);
+    font-size: calc(14px * var(--font-scale));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background 0.2s;
+}
+
+.win-btn:hover { background: var(--hover-bg); }
+
+.maximize-btn::before {
+    content: "";
+    width: 10px;
+    height: 10px;
+    border: 1.5px solid currentColor;
+    border-radius: 1px;
+}
+
+.maximized .maximize-btn::before {
+    width: 9px;
+    height: 9px;
+    box-shadow: 2px -2px 0 -1.5px currentColor, 2px -2px 0 -0.5px currentColor;
+}
+
+.close-btn:hover { background: #e81123 !important; }
+
+.window-content {
+    flex: 1;
+    overflow: auto;
+    color: var(--font-color);
+}
